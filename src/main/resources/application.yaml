@@ -1,0 +1,13 @@
+server:
+  port: 8060
+
+logging:
+  level:
+    org:
+      springframework:
+        web:
+          client: DEBUG
+      hibernate:
+        type: TRACE
+swagger:
+  show: true
