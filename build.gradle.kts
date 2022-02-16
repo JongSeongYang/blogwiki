@@ -31,9 +31,16 @@ dependencies {
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
-	implementation ("io.springfox:springfox-swagger2:2.7.0")
-	implementation("io.springfox:springfox-swagger2:2.7.0")
+	// swagger
+	implementation ("io.springfox:springfox-boot-starter:3.0.0")
+	implementation("io.springfox:springfox-swagger-ui:3.0.0")
+	// okhttp
+	implementation("com.squareup.okhttp3", "okhttp", "4.2.2")
+	// jwtToken
+	implementation ("io.jsonwebtoken:jjwt-api:0.11.2")
+	runtimeOnly ("io.jsonwebtoken:jjwt-impl:0.11.2", "io.jsonwebtoken:jjwt-jackson:0.11.2")
 }
 
 tasks.withType<KotlinCompile> {

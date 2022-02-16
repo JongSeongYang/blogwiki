@@ -18,21 +18,20 @@ class SwaggerConfig {
 
     @Bean
     fun productApi(): Docket {
-
-        return Docket(DocumentationType.SWAGGER_2)
+        return Docket(DocumentationType.OAS_30)
                 .apiInfo(apiInfo())
                 .securityContexts(listOf(securityContext()))
                 .securitySchemes(listOf(apiKey()))
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.hiandd.wiki.server"))
+                .apis(RequestHandlerSelectors.basePackage("com.hiandd.wiki"))
                 .paths(PathSelectors.any())
                 .build()
 
     }
 
-    fun apiInfo() : ApiInfo{
+    fun apiInfo() : ApiInfo {
         return ApiInfoBuilder()
-                .title("BLOG WIKI TEST")
+                .title("BLOG WIKI API")
                 .description("Blog Wiki Description of API")
                 .version("0.0.1")
                 .termsOfServiceUrl("http://hiandd.com")
@@ -48,6 +47,7 @@ class SwaggerConfig {
                 )
                 .build();
     }
+
 
     fun apiKey(): ApiKey {
         return ApiKey("JWT", "Authorization", "header")
