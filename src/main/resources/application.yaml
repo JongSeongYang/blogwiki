@@ -1,13 +1,14 @@
 server:
   port: 8060
-
+spring:
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  data:
+    mongodb:
+      uri: mongodb://workingscorpion.com:50809/ourblogtest
 logging:
   level:
-    org:
-      springframework:
-        web:
-          client: DEBUG
-      hibernate:
-        type: TRACE
-swagger:
-  show: true
+    org.springframework.data.mongodb: DEBUG
