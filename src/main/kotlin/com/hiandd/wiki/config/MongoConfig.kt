@@ -1,23 +1,32 @@
 package com.hiandd.wiki.config
 
-import com.mongodb.ConnectionString
-import com.mongodb.MongoClientSettings
-import com.mongodb.client.MongoClient
-import com.mongodb.client.MongoClients
-import org.springframework.data.mongodb.config.AbstractMongoClientConfiguration
+import org.springframework.boot.autoconfigure.mongo.MongoProperties
+import org.springframework.boot.context.properties.ConfigurationProperties
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
+import org.springframework.data.mongodb.MongoDatabaseFactory
+import org.springframework.data.mongodb.MongoTransactionManager
+import org.springframework.data.mongodb.config.EnableMongoAuditing
+import org.springframework.data.mongodb.core.SimpleMongoClientDatabaseFactory
 
-class MongoConfig : AbstractMongoClientConfiguration() {
+@Configuration
+@EnableMongoAuditing
+class MongoConfig {
 
-    override fun getDatabaseName(): String {
-        return "ourblogtest"
+    @Bean
+    @ConfigurationProperties("spring.data.mongodb")
+    fun properties(): MongoProperties {
+        return MongoProperties()
     }
 
-    override fun mongoClient(): MongoClient {
-        val connectionString = ConnectionString("mogodb://workingscorpion.com:50809/ourblogtest")
-        val mongoClientSettings = MongoClientSettings
-                .builder().applyConnectionString(connectionString)
-                .build()
-
-        return MongoClients.create(mongoClientSettings)
+    @Bean
+    fun mongoClientDatabaseFactory(properties: MongoProperties): SimpleMongoClientDatabaseFactory {
+        return SimpleMongoClientDatabaseFactory(properties.uri)
     }
+
+    @Bean
+    fun transactionManager(databaseFactory: MongoDatabaseFactory): MongoTransactionManager {
+        return MongoTransactionManager(databaseFactory)
+    }
+
 }
