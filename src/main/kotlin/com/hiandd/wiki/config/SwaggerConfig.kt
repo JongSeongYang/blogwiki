@@ -28,7 +28,6 @@ class SwaggerConfig {
                 .apis(RequestHandlerSelectors.basePackage("com.hiandd.wiki"))
                 .paths(PathSelectors.any())
                 .build()
-
     }
 
     @Bean
@@ -43,7 +42,6 @@ class SwaggerConfig {
                 .apis(RequestHandlerSelectors.basePackage("com.hiandd.wiki"))
                 .paths(PathSelectors.ant("/api/v1/**"))
                 .build()
-
     }
 
     fun apiInfo() : ApiInfo {
@@ -67,7 +65,7 @@ class SwaggerConfig {
 
     fun apiInfo(version:String) : ApiInfo {
         return ApiInfoBuilder()
-                .title("BLOG WIKI API"+ version)
+                .title("BLOG WIKI API "+ version)
                 .description("Blog Wiki Description of API")
                 .version(version)
                 .termsOfServiceUrl("http://hiandd.com")

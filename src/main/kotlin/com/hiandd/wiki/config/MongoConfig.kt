@@ -1,5 +1,10 @@
 package com.hiandd.wiki.config
 
+import com.querydsl.core.types.ExpressionUtils
+import com.querydsl.core.types.Ops
+import com.querydsl.core.types.Path
+import com.querydsl.core.types.Predicate
+import com.querydsl.core.types.dsl.Expressions
 import org.springframework.boot.autoconfigure.mongo.MongoProperties
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.context.annotation.Bean
@@ -8,6 +13,9 @@ import org.springframework.data.mongodb.MongoDatabaseFactory
 import org.springframework.data.mongodb.MongoTransactionManager
 import org.springframework.data.mongodb.config.EnableMongoAuditing
 import org.springframework.data.mongodb.core.SimpleMongoClientDatabaseFactory
+import org.springframework.data.mongodb.core.query.TextCriteria
+import org.springframework.data.mongodb.core.query.Update
+import kotlin.reflect.KProperty
 
 @Configuration
 @EnableMongoAuditing
@@ -29,4 +37,24 @@ class MongoConfig {
         return MongoTransactionManager(databaseFactory)
     }
 
+    // Querydsl 에서의 text 인덱스에 대한 FTS 를 위한 TextCriteria.toPredicate() 확장 함수 작성
+    fun TextCriteria.toPredicate(documentType: Any): Predicate {
+
+        val path: Path<Any>? = ExpressionUtils.path(documentType::class.java, "\$text")
+        val value = Expressions.constant(this.criteriaObject["\$text"])
+
+        return ExpressionUtils.predicate(Ops.EQ, path, value)
+    }
+
+    // Type-Safe로 작동하는 Update.set() 확장 함수 작성
+    fun Update.set(property: KProperty<*>, value: Any?): Update {
+
+        return set(property.name, value)
+    }
+
+    // Type-Safe로 작동하는 Update.inc() 확장 함수 작성
+    fun Update.inc(property: KProperty<*>, value: Number): Update {
+
+        return inc(property.name, value)
+    }
 }

@@ -1,12 +1,18 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jetbrains.kotlin.ir.backend.js.compile
+import org.jetbrains.kotlin.kapt3.base.Kapt.kapt
 
 plugins {
 	id("org.springframework.boot") version "2.5.9"
 	id("io.spring.dependency-management") version "1.0.11.RELEASE"
 	kotlin("jvm") version "1.5.32"
+	kotlin("kapt") version "1.5.32"
 	kotlin("plugin.spring") version "1.5.32"
 	kotlin("plugin.jpa") version "1.5.32"
+}
+
+sourceSets["main"].withConvention(org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet::class) {
+	kotlin.srcDir("$buildDir/generated/source/kapt/main")
 }
 
 group = "com.hiandd"
@@ -25,8 +31,14 @@ allOpen {
 
 
 dependencies {
+	// db
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
+	// querydsl
+	api("com.querydsl:querydsl-jpa:4.4.0")
+	implementation("com.querydsl:querydsl-mongodb:4.4.0")
+	kapt("com.querydsl:querydsl-apt:4.2.2:jpa")
+	kapt("org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.2.Final")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
