@@ -1,5 +1,7 @@
 package com.hiandd.wiki.domain
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
+import com.hiandd.wiki.utils.TimeZoneDateSerializer
 import org.springframework.data.mongodb.core.mapping.Document
 import org.springframework.data.mongodb.core.mapping.Field
 import org.springframework.data.mongodb.core.mapping.FieldType
@@ -36,15 +38,15 @@ data class Posts(
         @Field(name = "CategoryObjectId")
         var categoryObjectId: String? = null,
 
-        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-        @Field(name = "CreatedTime")
+        @JsonSerialize(using = TimeZoneDateSerializer::class)
+        @Field(name = "CreatedTime", targetType = FieldType.TIMESTAMP)
         var createdTime : ZonedDateTime? = ZonedDateTime.now(ZoneOffset.UTC),
 
-        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-        @Field(name = "UpdatedTime")
+        @JsonSerialize(using = TimeZoneDateSerializer::class)
+        @Field(name = "UpdatedTime", targetType = FieldType.TIMESTAMP)
         var updatedTime : ZonedDateTime? = ZonedDateTime.now(ZoneOffset.UTC),
 
-        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-        @Field(name = "DeletedTime")
+        @JsonSerialize(using = TimeZoneDateSerializer::class)
+        @Field(name = "DeletedTime", targetType = FieldType.TIMESTAMP)
         var deletedTime : ZonedDateTime? = null
 )

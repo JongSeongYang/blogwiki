@@ -1,10 +1,13 @@
 package com.hiandd.wiki.domain
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
+import com.hiandd.wiki.utils.TimeZoneDateSerializer
 import org.bson.types.ObjectId
 import org.springframework.data.mongodb.core.mapping.Document
 import org.springframework.data.mongodb.core.mapping.Field
 import org.springframework.data.mongodb.core.mapping.FieldType
 import org.springframework.format.annotation.DateTimeFormat
+import java.time.LocalDateTime
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
@@ -38,19 +41,19 @@ data class Users(
         @Field(name = "CompanyObjectId")
         var companyObjectId : String? = null,
 
-        @Field(name = "LastChallengeTime")
-        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-        var lastChallengeTime : ZonedDateTime? = null,
+        @Field(name = "LastChallengeTime", targetType = FieldType.TIMESTAMP)
+        @JsonSerialize(using = TimeZoneDateSerializer::class)
+        var lastChallengeTime : LocalDateTime? = null,
 
-        @Field(name = "CreatedTime")
-        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-        var createdTime : ZonedDateTime? = ZonedDateTime.now(ZoneOffset.UTC),
+        @Field(name = "CreatedTime", targetType = FieldType.TIMESTAMP)
+        @JsonSerialize(using = TimeZoneDateSerializer::class)
+        var createdTime : LocalDateTime? = LocalDateTime.now(ZoneOffset.UTC),
 
-        @Field(name = "UpdatedTime")
-        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-        var updatedTime : ZonedDateTime? = ZonedDateTime.now(ZoneOffset.UTC),
+        @Field(name = "UpdatedTime", targetType = FieldType.TIMESTAMP)
+        @JsonSerialize(using = TimeZoneDateSerializer::class)
+        var updatedTime : LocalDateTime? = LocalDateTime.now(ZoneOffset.UTC),
 
-        @Field(name = "DeletedTime")
-        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-        var deletedTime : ZonedDateTime? = null
+        @Field(name = "DeletedTime", targetType = FieldType.TIMESTAMP)
+        @JsonSerialize(using = TimeZoneDateSerializer::class)
+        var deletedTime : LocalDateTime? = null
 )
