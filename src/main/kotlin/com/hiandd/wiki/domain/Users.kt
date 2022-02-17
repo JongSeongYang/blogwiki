@@ -19,19 +19,38 @@ data class Users(
         @Field(name = "_id", targetType = FieldType.OBJECT_ID)
         @Id @GeneratedValue(strategy = GenerationType.AUTO)
         var userId : String? = null,
+
         @Field(name = "Email")
         var email : String? = null,
+
+        @Field(name = "Password")
         var password : String? = null,
+
+        @Field(name = "Profile")
         var profile : String? = null,
+
+        @Field(name = "Name")
         var name : String? = null,
+
+        @Field(name = "Role")
         var role : String? = null,
-        var CompanyObjectId : String? = null,
+
+        @Field(name = "CompanyObjectId")
+        var companyObjectId : String? = null,
+
+        @Field(name = "LastChallengeTime")
         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
         var lastChallengeTime : ZonedDateTime? = null,
+
+        @Field(name = "CreatedTime")
         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
         var createdTime : ZonedDateTime? = ZonedDateTime.now(ZoneOffset.UTC),
+
+        @Field(name = "UpdatedTime")
         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
         var updatedTime : ZonedDateTime? = ZonedDateTime.now(ZoneOffset.UTC),
+
+        @Field(name = "DeletedTime")
         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
         var deletedTime : ZonedDateTime? = null
 )
