@@ -16,6 +16,8 @@ import java.util.*
 @EnableSwagger2
 class SwaggerConfig {
 
+    lateinit var version: String
+
     @Bean
     fun productApi(): Docket {
         return Docket(DocumentationType.OAS_30)
@@ -29,11 +31,45 @@ class SwaggerConfig {
 
     }
 
+    @Bean
+    fun productApiV1(): Docket {
+        version = "V1"
+        return Docket(DocumentationType.OAS_30)
+                .apiInfo(apiInfo(version))
+                .groupName(version)
+                .securityContexts(listOf(securityContext()))
+                .securitySchemes(listOf(apiKey()))
+                .select()
+                .apis(RequestHandlerSelectors.basePackage("com.hiandd.wiki"))
+                .paths(PathSelectors.ant("/api/v1/**"))
+                .build()
+
+    }
+
     fun apiInfo() : ApiInfo {
         return ApiInfoBuilder()
                 .title("BLOG WIKI API")
                 .description("Blog Wiki Description of API")
                 .version("0.0.1")
+                .termsOfServiceUrl("http://hiandd.com")
+                .license("Apache License Version 2.0")
+                .licenseUrl("https://www.apache.org/licenses/LICENSE-2.0")
+                .extensions(Collections.emptyList())
+                .contact(
+                        Contact(
+                                "JongSeong",
+                                "http://baegoon.kr",
+                                "jsyang@hiandd.com"
+                        )
+                )
+                .build();
+    }
+
+    fun apiInfo(version:String) : ApiInfo {
+        return ApiInfoBuilder()
+                .title("BLOG WIKI API"+ version)
+                .description("Blog Wiki Description of API")
+                .version(version)
                 .termsOfServiceUrl("http://hiandd.com")
                 .license("Apache License Version 2.0")
                 .licenseUrl("https://www.apache.org/licenses/LICENSE-2.0")
