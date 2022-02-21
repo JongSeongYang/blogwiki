@@ -5,6 +5,7 @@ import com.querydsl.core.types.Ops
 import com.querydsl.core.types.Path
 import com.querydsl.core.types.Predicate
 import com.querydsl.core.types.dsl.Expressions
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.mongo.MongoProperties
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.context.annotation.Bean
@@ -13,13 +14,21 @@ import org.springframework.data.mongodb.MongoDatabaseFactory
 import org.springframework.data.mongodb.MongoTransactionManager
 import org.springframework.data.mongodb.config.EnableMongoAuditing
 import org.springframework.data.mongodb.core.SimpleMongoClientDatabaseFactory
+import org.springframework.data.mongodb.core.convert.DefaultMongoTypeMapper
+import org.springframework.data.mongodb.core.convert.MappingMongoConverter
+import org.springframework.data.mongodb.core.mapping.MongoMappingContext
 import org.springframework.data.mongodb.core.query.TextCriteria
 import org.springframework.data.mongodb.core.query.Update
+import javax.annotation.PostConstruct
 import kotlin.reflect.KProperty
+
 
 @Configuration
 @EnableMongoAuditing
-class MongoConfig {
+class MongoConfig{
+
+    @Autowired
+    lateinit var mappingMongoConverter : MappingMongoConverter
 
     @Bean
     @ConfigurationProperties("spring.data.mongodb")
@@ -56,5 +65,10 @@ class MongoConfig {
     fun Update.inc(property: KProperty<*>, value: Number): Update {
 
         return inc(property.name, value)
+    }
+
+    @PostConstruct
+    fun setUpMongoEscapeCharacterConversion() {
+        mappingMongoConverter.setTypeMapper(DefaultMongoTypeMapper(null))
     }
 }
