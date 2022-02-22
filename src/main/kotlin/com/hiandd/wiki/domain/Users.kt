@@ -2,6 +2,7 @@ package com.hiandd.wiki.domain
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.hiandd.wiki.utils.TimeZoneDateSerializer
+import com.querydsl.core.annotations.QueryEntity
 import org.bson.types.ObjectId
 import org.springframework.data.mongodb.core.mapping.Document
 import org.springframework.data.mongodb.core.mapping.Field
@@ -17,6 +18,7 @@ import javax.persistence.GenerationType
 import javax.persistence.Id
 
 @Entity
+@QueryEntity
 @Document(collection="Users")
 data class Users(
         @Field(name = "_id", targetType = FieldType.OBJECT_ID)
