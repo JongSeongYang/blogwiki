@@ -27,7 +27,7 @@ public class PostController (
         return ResponseEntity.ok(findByTitle)
     }
 
-    @ApiOperation(value = "post title 조회 Querydsl", notes = "post title 조회 Querydsl")
+    @ApiOperation(value = "post title 조회", notes = "post title 조회 Querydsl")
     @GetMapping(value = ["/query/{title}"], produces = [MediaType.APPLICATION_JSON_VALUE])
     fun getUserByTitleWithQuerydsl(@PathVariable title: String): ResponseEntity<MutableIterable<Posts>>? {
         val findByTitle: MutableIterable<Posts> = postService.findAllByTitleWithQuerydsl(title)
@@ -42,8 +42,8 @@ public class PostController (
     }
 
     @ApiOperation(value = "post id 로 조회", notes = "post id 로 조회")
-    @GetMapping(value = ["/post"], produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun getPostById(@RequestParam id: String): ResponseEntity<Posts> {
+    @GetMapping(value = ["/{id}"], produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun getPostById(@PathVariable id: String): ResponseEntity<Posts> {
         val findById = postService.findPostById(id)
         return ResponseEntity.ok(findById)
     }

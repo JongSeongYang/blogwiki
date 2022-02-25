@@ -7,10 +7,7 @@ import com.mongodb.client.result.UpdateResult
 import org.bson.types.ObjectId
 import org.springframework.data.domain.Sort
 import org.springframework.data.mongodb.core.MongoTemplate
-import org.springframework.data.mongodb.core.query.Criteria
-import org.springframework.data.mongodb.core.query.Query
-import org.springframework.data.mongodb.core.query.Update
-import org.springframework.data.mongodb.core.query.isEqualTo
+import org.springframework.data.mongodb.core.query.*
 import org.springframework.stereotype.Repository
 import java.time.LocalDateTime
 import java.time.ZoneOffset
@@ -21,10 +18,15 @@ class PostsRepositorySupport(
         private val mongoTemplate: MongoTemplate
 ) {
 
+    fun makeQuery(id: String): Query {
+        return Query().addCriteria(Criteria.where("DeletedTime").`is`(null))
+                .addCriteria(Posts::_id isEqualTo ObjectId(id))
+    }
+
     fun findAllPostsByTitle(title: String): MutableIterable<Posts> {
         return postRepository
                 .findAll(
-                      posts.title.startsWith(title),
+                      posts.title.contains(title).and(posts.deletedTime.isNotNull),
                         Sort.by("CreatedTime").descending()
                 )
     }
@@ -45,8 +47,7 @@ class PostsRepositorySupport(
     }
 
     fun deletePost(id: String): UpdateResult {
-        val query: Query = Query().addCriteria(Posts::_id isEqualTo ObjectId(id))
-                .addCriteria("DeletedTime" isEqualTo null)
+        val query = makeQuery(id)
         val update: Update = Update().set("DeletedTime",LocalDateTime.now(ZoneOffset.UTC))
                 .set("UpdatedTime", LocalDateTime.now(ZoneOffset.UTC))
         return mongoTemplate.updateFirst(query, update, "Posts")
@@ -55,8 +56,7 @@ class PostsRepositorySupport(
     fun deleteAllPost(idList: List<String>): Long {
         var result: Long = 0
         idList.forEach() {
-            val query: Query = Query().addCriteria(Posts::_id isEqualTo ObjectId(it))
-//                    .addCriteria(Posts::deletedTime isEqualTo null)
+            val query = makeQuery(it)
             val update: Update = Update().set("DeletedTime",LocalDateTime.now(ZoneOffset.UTC))
                     .set("UpdatedTime", LocalDateTime.now(ZoneOffset.UTC))
             result += mongoTemplate.updateFirst(query, update, "Posts").modifiedCount

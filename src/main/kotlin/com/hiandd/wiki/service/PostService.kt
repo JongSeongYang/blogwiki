@@ -29,7 +29,7 @@ class PostService(
             PageRequest.of(page, pageSize, Sort.by(order.asList()))
 
     fun findAllPost(page:Int): Page<Posts> {
-        return postRepository.findAll(generatePageable(page,10))
+        return postRepository.findAllByDeletedTimeIsNullOrderByCreatedTimeDesc(generatePageable(page,10))
     }
 
     fun findAllByTitle(title: String): MutableList<Posts> {
