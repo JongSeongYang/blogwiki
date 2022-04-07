@@ -8,7 +8,7 @@ spring:
         format_sql: true
   data:
     mongodb:
-      uri: mongodb://workingscorpion.com:50809/ourblogtest
+      uri:
 logging:
   level:
     org.springframework.data.mongodb: DEBUG
